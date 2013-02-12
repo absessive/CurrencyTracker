@@ -12,7 +12,7 @@
 
 <p>
   <b>Status:</b>
-  <%= @country.visited? ? 'Visited' : 'Not Visited' %>
+  <%= Visit.find_by_username_and_country_code(current_user.username, @country.code).nil? ? 'Not Visited' : 'Visited' %>
 </p>
 
 <p>

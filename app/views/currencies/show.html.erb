@@ -12,7 +12,7 @@
 
 <p>
   <b>Status:</b>
-  <%= @currency.collected? ? 'Collected' : 'Not Collected' %>
+  <%= Visit.find_by_username_and_country_code(current_user.username, @currency.country_id).nil? ? 'Not Collected' : 'Collected' %>
 </p>
 
 <p>

@@ -25,6 +25,9 @@ class CountriesController < ApplicationController
   # GET /countries/1/edit
   def edit
     @country = Country.find(params[:id])
+    @visits = Visit.find_by_username_and_country_code(current_user.username, @country.code)
+    @country.visited = false
+	@country.visited = true unless @visits.nil?
   end
 
   # POST /countries
@@ -47,9 +50,19 @@ class CountriesController < ApplicationController
   # PUT /countries/1.xml
   def update
     @country = Country.find(params[:id])
+    @visit = Visit.new
+    
+    
 
     respond_to do |format|
       if @country.update_attributes(params[:country])
+        puts "*** updated country ***"
+        puts "#{params[:id]}"
+        puts "*** updated country ***"
+        @visit.username = current_user.username
+        @visit.country_code = params[:id]
+        @visit.save!
+        puts "@visit saved"
         format.html { redirect_to(@country, :notice => 'Country was successfully updated.') }
         format.xml  { head :ok }
       else

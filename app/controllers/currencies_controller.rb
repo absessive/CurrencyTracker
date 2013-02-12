@@ -4,7 +4,6 @@ class CurrenciesController < ApplicationController
   # GET /currencies.xml
   def index
     @currencies = Currency.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @currencies }

@@ -12,9 +12,9 @@
   </div>
 
   <h1>Countries</h1>
-
   <table>
     <tr>
+      <th><%= button_tag "Visit" %></th>    
       <th>Name</th>
       <th>Code</th>
       <th>Status</th>
@@ -24,12 +24,16 @@
 
   <% @countries.each do |country| %>
     <tr>
+      <td><%= check_box_tag "visit" %></td>
       <td><%= country.name %></td>
       <td><%= country.code %></td>
-      <td><%= country.visited? ? 'Visited' : 'Not Visited' %></td>
+	  <td><%= Visit.find_by_username_and_country_code(current_user.username, country.code).nil? ? 'Not Visited' : 'Visited' %></td>
       <td><%= link_to 'Show', country %></td>
       <td><%= link_to 'Edit', edit_country_path(country) %></td>
     </tr>
   <% end %>
   </table>
+  
+  
 </section>
+<p>  <small><%= current_user.username %></small> </p>
