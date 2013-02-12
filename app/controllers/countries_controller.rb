@@ -1,4 +1,5 @@
 class CountriesController < ApplicationController
+  before_filter :signed_in_user, only: [:show, :index]
   # GET /countries
   # GET /countries.xml
   def index

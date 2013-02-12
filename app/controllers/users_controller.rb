@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :signed_in_user, only: [:show, :index]
   # GET /users
   # GET /users.json
   def index
@@ -80,4 +81,12 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+#   private
+#     def current_user?
+#   		!current_user.nil?
+#   	end
+#     def signed_in_user
+#       redirect_to login_url, notice: "Please sign in" unless current_user?
+#     end
 end

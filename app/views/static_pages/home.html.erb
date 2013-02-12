@@ -6,7 +6,11 @@
   </h2>
 
   <body>
-  	<p>Click 'Register' if you are a new user. Existing users login.</p>
+  	<% if current_user %>
+    	<p>Click Currencies or Countries.</p>
+    <% else %>
+	  	<p>Click 'Register' if you are a new user. Existing users login.</p>
+	<% end %>  	
   </body>
 </div>
 

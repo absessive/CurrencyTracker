@@ -1,4 +1,5 @@
 class CurrenciesController < ApplicationController
+  before_filter :signed_in_user, only: [:show, :index]
   # GET /currencies
   # GET /currencies.xml
   def index

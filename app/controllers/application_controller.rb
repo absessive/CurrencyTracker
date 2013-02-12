@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  
+  include UserSessionsHelper
   helper_method :current_user
   
   private
