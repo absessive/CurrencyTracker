@@ -4,6 +4,7 @@ gem 'rails', '3.2'
 gem 'sqlite3'
 gem 'savon'
 gem 'nokogiri'
+gem 'authlogic'
 
 group :development do
   gem 'capybara'

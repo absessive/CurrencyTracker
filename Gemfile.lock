@@ -33,6 +33,9 @@ GEM
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
     arel (3.0.2)
+    authlogic (3.2.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     builder (3.0.4)
     capybara (2.0.1)
       mime-types (>= 1.16)
@@ -152,6 +155,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  authlogic
   capybara
   cucumber
   cucumber-rails

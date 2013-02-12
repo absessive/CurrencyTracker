@@ -1,6 +1,8 @@
 CurrencyTracker::Application.routes.draw do
-  # get "static_pages/home"
+  resources :users, :user_sessions
 
+  # get "static_pages/home"
+ 
   root to: 'static_pages#home'
   # root :to => "currencies#index"
   
@@ -8,6 +10,9 @@ CurrencyTracker::Application.routes.draw do
 
   resources :currencies, :only => [:index, :show]
 
+  match 'login' => 'user_sessions#new', :as => :login
+  match 'logout' => 'user_sessions#destroy', :as => :logout
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

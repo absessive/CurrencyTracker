@@ -9,11 +9,17 @@
 <body>
 
 <header>
-  <h1>CurrencyTracker</h1>
+  <h1><%= link_to "CurrencyTracker", root_path, id: "logo" %></h1>
   <nav>
     <ul>
-      <li><%= link_to "Currencies", currencies_path %></li>
-      <li><%= link_to "Countries", countries_path %></li>
+    	<% if current_user %>
+      		<li><%= link_to "Currencies", currencies_path %></li>
+      		<li><%= link_to "Countries", countries_path %></li>
+      		<li><%= link_to "Logout", :logout %></li>
+      	<% else %>	
+      		<li><%= link_to "Register", new_user_path%></li>
+      		<li><%= link_to "Login", :login %></li>
+      	<% end %>
     </ul>
   </nav>
 </header>
