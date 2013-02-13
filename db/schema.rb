@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212142853) do
+ActiveRecord::Schema.define(:version => 20130212224954) do
 
   create_table "countries", :id => false, :force => true do |t|
     t.string   "name"
@@ -50,5 +50,7 @@ ActiveRecord::Schema.define(:version => 20130212142853) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  add_index "visits", ["username", "country_code"], :name => "index_visits_on_username_and_country_code", :unique => true
 
 end

@@ -2,17 +2,18 @@
   <div id="collected_currencies_chart" class="simple_pie_chart" width='300px' height='100px'>
     <table>
       <tr>
+      <%= collected = Currency.find_by_sql("select * from visits, currencies where (visits.country_code  = currencies.country_id) and visits.username = '#{current_user.username}'").count %>
         <th>Collected</th>
-        <td><%= Currency.collected.count %></td>
+        <td><%= collected %></td>
       </tr><tr>
         <th>Not Collected</th>
-        <td><%= Currency.not_collected.count %></td>
+        <td><%= Currency.count - collected %></td>
       </tr>
     </table>
   </div>
 
   <h1>Currencies</h1>
-
+  <%= form_tag update_multiple_currencies_path, :method => :put do %>
   <table>
     <tr>
       <th>Select</th>
@@ -25,7 +26,7 @@
 
   <% @currencies.each do |currency| %>
     <tr>
-      <td></td>
+	  <td><%= check_box_tag "country_ids[]", currency.country_id %></td>
       <td><%= currency.name %></td>
       <td><%= currency.code %></td>
       <td><%= Visit.find_by_username_and_country_code(current_user.username, currency.country_id).nil? ? 'Not Collected' : 'Collected' %></td>
@@ -34,4 +35,6 @@
     </tr>
   <% end %>
   </table>
+    <%= submit_tag "Collect" %>
+  <% end %>
 </section>

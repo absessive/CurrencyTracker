@@ -3,37 +3,37 @@
     <table>
       <tr>
         <th>Visited</th>
-        <td><%= Country.visited.count %></td>
+        <td><%= Visit.where(username: current_user.username).count %></td>
       </tr><tr>
         <th>Not Visited</th>
-        <td><%= Country.not_visited.count %></td>
+        <td><%= Country.count - Visit.where(username: current_user.username).count %></td>
       </tr>
     </table>
   </div>
 
   <h1>Countries</h1>
+  <%= form_tag update_multiple_countries_path, :method => :put do %>
   <table>
     <tr>
-      <th><%= button_tag "Visit" %></th>    
+      <th>Select</th>    
       <th>Name</th>
       <th>Code</th>
       <th>Status</th>
       <th></th>
       <th></th>
     </tr>
-
-  <% @countries.each do |country| %>
-    <tr>
-      <td><%= check_box_tag "visit" %></td>
-      <td><%= country.name %></td>
-      <td><%= country.code %></td>
-	  <td><%= Visit.find_by_username_and_country_code(current_user.username, country.code).nil? ? 'Not Visited' : 'Visited' %></td>
-      <td><%= link_to 'Show', country %></td>
-      <td><%= link_to 'Edit', edit_country_path(country) %></td>
-    </tr>
+  	<% for country in @countries %>
+    	<tr>
+      		<td><%= check_box_tag "country_ids[]", country.id %></td>
+      		<td><%= country.name %></td>
+      		<td><%= country.code %></td>
+	  		<td><%= Visit.find_by_username_and_country_code(current_user.username, country.code).nil? ? 'Not Visited' : 'Visited' %></td>
+      		<td><%= link_to 'Show', country %></td>
+      		<td><%= link_to 'Edit', edit_country_path(country) %></td>
+    	</tr>
   <% end %>
   </table>
-  
-  
+  <%= submit_tag "Visit" %>
+  <% end %>
 </section>
 <p>  <small><%= current_user.username %></small> </p>

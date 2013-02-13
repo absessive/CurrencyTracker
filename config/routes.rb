@@ -5,13 +5,25 @@ CurrencyTracker::Application.routes.draw do
  
   root to: 'static_pages#home'
   # root :to => "currencies#index"
-  
+  # resources :countries, :collection => { :update_multiple => :put }
+  resources :countries do
+  	collection do
+  		put 'update_multiple'
+  	end
+  end 
   resources :countries, :except => [:new, :destroy]
 
+
+  resources :currencies do
+  	collection do
+  		put 'update_multiple'
+  	end
+  end
   resources :currencies, :only => [:index, :show]
 
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout
+  
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

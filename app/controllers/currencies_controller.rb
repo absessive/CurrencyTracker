@@ -20,4 +20,17 @@ class CurrenciesController < ApplicationController
       format.xml  { render :xml => @currency }
     end
   end
+  
+  # PUT /currencies
+  def update_multiple
+    puts "Entered update_multiple"
+    
+    # Check for duplicates
+    # redirect_to @countries, notice: 'You already visited the previous selections'
+    params[:country_ids].each do |id|
+    	Visit.create!(username: current_user.username, country_code: id.to_s)	
+    end
+    redirect_to currencies_path, notice: "Updated collected currencies"  	
+  end
+  
 end

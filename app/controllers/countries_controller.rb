@@ -3,6 +3,7 @@ class CountriesController < ApplicationController
   # GET /countries
   # GET /countries.xml
   def index
+    puts params.inspect
     @countries = Country.all
 
     respond_to do |format|
@@ -51,9 +52,6 @@ class CountriesController < ApplicationController
   def update
     @country = Country.find(params[:id])
     @visit = Visit.new
-    
-    
-
     respond_to do |format|
       if @country.update_attributes(params[:country])
         puts "*** updated country ***"
@@ -69,6 +67,21 @@ class CountriesController < ApplicationController
         format.html { render :action => "edit" }
         format.xml  { render :xml => @country.errors, :status => :unprocessable_entity }
       end
+    end        
+  end
+  
+  def edit_multiple
+    
+  end
+    
+  def update_multiple
+    puts "Entered update_multiple"
+    
+    # Check for duplicates
+    # redirect_to @countries, notice: 'You already visited the previous selections'
+    params[:country_ids].each do |id|
+    	Visit.create!(username: current_user.username, country_code: id.to_s)	
     end
+    redirect_to countries_path, notice: "Updated visited countries"
   end
 end
