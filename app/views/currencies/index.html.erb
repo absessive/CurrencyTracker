@@ -11,6 +11,11 @@
       </tr>
     </table>
   </div>
+  
+  <div id="currencies_graph" style="width: 460px; height: 300px;">
+  	<table class="pretty">
+  	</table>
+  </div>
 
   <h1>Currencies</h1>
   <%= form_tag update_multiple_currencies_path, :method => :put do %>
@@ -38,3 +43,21 @@
     <%= submit_tag "Collect" %>
   <% end %>
 </section>
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'currencies_graph' },
+    title: { text: 'Total Visited' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'No. of Currencies' }
+    },
+    series: [{
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 10.days.ago.at_midnight.to_i * 1000 %>,
+      data: <%= (10.days.ago.to_date..Date.today).map { |date| Visit.total_visited(date, current_user.username)}.inspect %>
+    }]
+  });
+});
+</script>
