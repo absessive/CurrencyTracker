@@ -2,12 +2,25 @@ class CountriesController < ApplicationController
   before_filter :signed_in_user, only: [:show, :index]
   # GET /countries
   # GET /countries.xml
-  def index
-    puts params.inspect
-    @countries = Country.all
-
+  def index  
+    if params[:search] && params[:step_search] == 'search'
+    	@countries = Country.search(params[:search])
+    elsif !params[:country_ids].nil?
+    	params[:country_ids].each do |id|
+#     		begin 
+#     			Visit.create!(username: current_user.username, country_code: id.to_s)
+#     		rescue ActiveRecord::RecordNotUnique
+#     			puts "skipping for #{id}"
+#     		end	
+			Visit.create!(username: current_user.username, country_code: id.to_s) unless Visit.exists?(username: current_user.username, country_code: id.to_s)
+    	end
+    	@countries = Country.all
+    else	
+    	@countries = Country.all
+	end
     respond_to do |format|
       format.html # index.html.erb
+      format.js
       format.xml  { render :xml => @countries }
     end
   end
@@ -51,16 +64,19 @@ class CountriesController < ApplicationController
   # PUT /countries/1.xml
   def update
     @country = Country.find(params[:id])
+    
+    
     @visit = Visit.new
+    
+    puts @country.visited
     respond_to do |format|
       if @country.update_attributes(params[:country])
-        puts "*** updated country ***"
-        puts "#{params[:id]}"
-        puts "*** updated country ***"
-        @visit.username = current_user.username
-        @visit.country_code = params[:id]
-        @visit.save!
-        puts "@visit saved"
+        if @country.visited	
+        	@visit.username = current_user.username
+        	@visit.country_code = params[:id]
+        	@visit.save!
+        	puts "@visit saved"
+        end	
         format.html { redirect_to(@country, :notice => 'Country was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -70,18 +86,19 @@ class CountriesController < ApplicationController
     end        
   end
   
-  def edit_multiple
+#   def search
+#     @countries = Country.search(params[:search])    
+#   end
     
-  end
-    
-  def update_multiple
-    puts "Entered update_multiple"
-    
-    # Check for duplicates
-    # redirect_to @countries, notice: 'You already visited the previous selections'
-    params[:country_ids].each do |id|
-    	Visit.create!(username: current_user.username, country_code: id.to_s)	
-    end
-    redirect_to countries_path, notice: "Updated visited countries"
-  end
+#   def update_multiple
+#     puts "Entered update_multiple"
+# 	puts params[:commit]
+# 	puts "Entered update_multiple"    
+#     # Check for duplicates
+#     # redirect_to @countries, notice: 'You already visited the previous selections'
+#     params[:country_ids].each do |id|
+#     	Visit.create!(username: current_user.username, country_code: id.to_s)	
+#     end
+#     
+#   end
 end

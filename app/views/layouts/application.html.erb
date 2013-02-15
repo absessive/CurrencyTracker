@@ -5,6 +5,7 @@
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag 'extensions', 'jquery-1.5.2.min', 'view_controller', 'simple_pie_chart' %>
   <%= javascript_include_tag "jquery-1.5.2.min", "rails", "highcharts" %>
+  <%= javascript_include_tag "application" %>
   <%= csrf_meta_tag %>
 </head>
 <body>
@@ -14,6 +15,7 @@
   <nav>
     <ul>
     	<% if current_user %>
+    		<li style="color:white">Welcome, <%= current_user.username.camelize %></li>
       		<li><%= link_to "Currencies", currencies_path %></li>
       		<li><%= link_to "Countries", countries_path %></li>
       		<li><%= link_to "Logout", :logout %></li>
@@ -30,6 +32,6 @@
 <footer>
   CurrencyTracker &copy; Copyright 2011 by Smart Enterprises.
 </footer>
-	<%= debug(params) if Rails.env.development? %>
+	<%#= debug(params) if Rails.env.development? %>
 </body>
 </html>

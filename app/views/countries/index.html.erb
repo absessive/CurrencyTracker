@@ -1,61 +1,50 @@
 <section>
   <div id="visited_countries_chart" class="simple_pie_chart" width='300px' height='100px'>
-    <table>
-      <tr>
-        <th>Visited</th>
-        <td><%= Visit.where(username: current_user.username).count %></td>
-      </tr><tr>
-        <th>Not Visited</th>
-        <td><%= Country.count - Visit.where(username: current_user.username).count %></td>
-      </tr>
-    </table>
+  	<%= render partial: 'chart' %>
   </div>
-  
-  <div id="countries_graph" style="width: 460px; height: 300px;">
+	  <div id="countries_graph" style="width: 460px; height: 300px;">
   	<table class="pretty">
   	</table>
   </div>
 
-  <h1>Countries</h1>
-  <%= form_tag update_multiple_countries_path, :method => :put do %>
-  <table>
-    <tr>
-      <th>Select</th>    
-      <th>Name</th>
-      <th>Code</th>
-      <th>Status</th>
-      <th></th>
-      <th></th>
-    </tr>
-  	<% for country in @countries %>
-    	<tr>
-      		<td><%= check_box_tag "country_ids[]", country.id %></td>
-      		<td><%= country.name %></td>
-      		<td><%= country.code %></td>
-	  		<td><%= Visit.find_by_username_and_country_code(current_user.username, country.code).nil? ? 'Not Visited' : 'Visited' %></td>
-      		<td><%= link_to 'Show', country %></td>
-      		<td><%= link_to 'Edit', edit_country_path(country) %></td>
-    	</tr>
-  <% end %>
-  </table>
-  <%= submit_tag "Visit" %>
-  <% end %>
-</section>
+
+  <h2>Countries</h2>
+	<%= form_tag({:controller => "countries", :action => "index"}, :method => :get, :id => 'countries_search'  )  do %>  
+      <p><%= text_field_tag :search, params[:search] %>
+      <%= hidden_field_tag 'step_search', 'search' %>
+      <%= submit_tag "Search", :onClick =>"document.getElementById('step_search').value='search'"  %>
+      <%= button_tag "Clear", :id => 'clear', :type => 'submit', :onClick =>"document.getElementById('step_search').value=''" %>     
+      </p>
+      <p id="select"><a href="#" onclick="selectAll()">Select All</a></p>
+    <% end %>      
+    <div id="countries"><%= render partial: 'countries' %> </div>
+  </section>
 
 <script type="text/javascript" charset="utf-8">
-$(function () {
+$(function (){
   new Highcharts.Chart({
     chart: { renderTo: 'countries_graph' },
     title: { text: 'Total Visited' },
     xAxis: { type: 'datetime' },
-    yAxis: {
+    yAxis: { min: 0,
       title: { text: 'No. of Countries' }
     },
     series: [{
+      name: 'Countries Visited',
       pointInterval: <%= 1.day * 1000 %>,
       pointStart: <%= 10.days.ago.at_midnight.to_i * 1000 %>,
-      data: <%= (10.days.ago.to_date..Date.today).map { |date| Visit.total_visited(date, current_user.username)}.inspect %>
+      data: <%= (10.days.ago.to_date..DateTime.now).map { |date| Visit.total_visited(date, current_user.username)}.inspect %>
     }]
   });
 });
 </script>
+
+<script type="text/javascript">
+      function selectAll(){
+        $("input:checkbox").each(function(){
+          $(this).attr('checked', true);
+        });
+        return false;
+      }
+</script>
+

@@ -3,11 +3,25 @@ class CurrenciesController < ApplicationController
   # GET /currencies
   # GET /currencies.xml
   def index
-    @currencies = Currency.all
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @currencies }
-    end
+    if params[:search] && params[:step_search] == 'search'
+    	@currencies = Currency.search(params[:search])
+    elsif !params[:country_ids].nil?
+        params[:country_ids].each do |id|
+#     		begin 
+#     			Visit.create!(username: current_user.username, country_code: id.to_s)
+#     		rescue ActiveRecord::RecordNotUnique
+#     			puts "skipping for #{id}"
+#     		end	
+			Visit.create!(username: current_user.username, country_code: id.to_s) unless Visit.exists?(username: current_user.username, country_code: id.to_s)
+    	end	
+    	@currencies = Currency.all
+    else	
+    	@currencies = Currency.all
+	end
+#     respond_to do |format|
+#       format.html # index.html.erb
+#       format.xml  { render :xml => @currencies }
+#     end
   end
 
   # GET /currencies/1

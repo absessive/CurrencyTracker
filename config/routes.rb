@@ -9,14 +9,15 @@ CurrencyTracker::Application.routes.draw do
   resources :countries do
   	collection do
   		put 'update_multiple'
+  		post 'search'
   	end
   end 
   resources :countries, :except => [:new, :destroy]
 
-
   resources :currencies do
   	collection do
   		put 'update_multiple'
+  		#get 'search'
   	end
   end
   resources :currencies, :only => [:index, :show]

@@ -1,0 +1,22 @@
+$("#countries").html("<%= escape_javascript(render("countries")) %>");
+$("#visited_countries_chart").html("<%= escape_javascript(render("chart")) %>");
+$('.simple_pie_chart').each(function() {
+  SimplePieChart.initialize(this);
+});
+
+$(function (){
+  new Highcharts.Chart({
+    chart: { renderTo: 'countries_graph' },
+    title: { text: 'Total Visited' },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0,
+      title: { text: 'No. of Countries' }
+    },
+    series: [{
+      name: 'Countries Visited',
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 10.days.ago.at_midnight.to_i * 1000 %>,
+      data: <%= (10.days.ago.to_date..DateTime.now).map { |date| Visit.total_visited(date, current_user.username)}.inspect %>
+    }]
+  });
+});

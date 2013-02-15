@@ -1,0 +1,9 @@
+    <table>
+      <tr>
+        <th>Visited</th>
+        <td><%= Visit.where(username: current_user.username).count %></td>
+      </tr><tr>
+        <th>Not Visited</th>
+        <td><%= Country.count - Visit.where(username: current_user.username).count %></td>
+      </tr>
+    </table>

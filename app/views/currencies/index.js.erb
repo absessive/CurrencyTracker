@@ -1,0 +1,21 @@
+$("#currencies").html("<%= escape_javascript(render("currencies")) %>");
+$("#collected_currencies_chart").html("<%= escape_javascript(render("chart")) %>");
+  $('.simple_pie_chart').each(function() {
+    SimplePieChart.initialize(this);
+  });
+$(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'currencies_graph' },
+    title: { text: 'Total Collected' },
+    xAxis: { type: 'datetime' },
+    yAxis: { min: 0,
+      title: { text: 'No. of Currencies' }
+    },
+    series: [{
+      name: 'Currencies Collected',
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 10.days.ago.at_midnight.to_i * 1000 %>,
+     data: <%= (10.days.ago.to_date..DateTime.now).map { |date| Visit.total_collected(date, current_user.username)}.inspect %>
+    }]
+  });
+});

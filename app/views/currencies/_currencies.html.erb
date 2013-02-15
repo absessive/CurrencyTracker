@@ -1,0 +1,24 @@
+<%= form_tag({:controller => "currencies", :action => "index"}, :method => :get, :id => 'currencies_collect'  )  do %>  
+  <table>
+    <tr>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Status</th>
+      <th></th>
+
+    </tr>
+
+  <% @currencies.each do |currency| %>
+    <tr>
+	  <td><%= check_box_tag "country_ids[]", currency.country_id %></td>
+      <td><%= currency.name %></td>
+      <td><%= currency.code %></td>
+      <td><%= Visit.find_by_username_and_country_code(current_user.username, currency.country_id).nil? ? 'Not Collected' : 'Collected' %></td>
+      <td><%= link_to 'Show', currency %></td>
+
+    </tr>
+  <% end %>
+  </table>
+    <%= submit_tag "Collect" %>
+  <% end %>

@@ -1,0 +1,10 @@
+    <table>
+      <tr>
+      <%= collected = Currency.find_by_sql("select * from visits, currencies where (visits.country_code  = currencies.country_id) and visits.username = '#{current_user.username}'").count %>
+        <th>Collected</th>
+        <td><%= collected %></td>
+      </tr><tr>
+        <th>Not Collected</th>
+        <td><%= Currency.count - collected %></td>
+      </tr>
+    </table>
